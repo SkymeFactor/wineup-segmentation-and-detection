@@ -33,7 +33,7 @@ import json
 import datetime
 import numpy as np
 import skimage.draw
-import cv2
+import cv2 as cv2
 from mrcnn.visualize import display_instances
 import matplotlib.pyplot as plt
 
