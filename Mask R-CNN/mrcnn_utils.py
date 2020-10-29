@@ -1,6 +1,6 @@
 import numpy as np
-import tensorflow as tf
 import skimage.transform
+from cv2 import cv2
 from distutils.version import LooseVersion
 
 
@@ -35,7 +35,7 @@ def generate_segmentation_from_masks(instance_masks, processed_bboxes, height, w
 
     Returns a binary mask with the same size as the original image.
     """
-    threshold = 0.7
+    threshold = 0.5
     full_mask = np.zeros([processed_bboxes.shape[0], height, width], dtype=np.uint8)
     for i in range(processed_bboxes.shape[0]):
         x1, y1, x2, y2 = processed_bboxes[i].astype("int")
@@ -47,3 +47,25 @@ def generate_segmentation_from_masks(instance_masks, processed_bboxes, height, w
         full_mask[i, y1:y1+y2, x1:x1+x2] = mask
 
     return full_mask
+
+def smooth_contours_on_mask(mask):
+    height = mask.shape[0]
+    width = mask.shape[1]
+    contours, _hierarchy = cv2.findContours(mask[:, :, 0].astype(np.uint8), cv2.RETR_TREE, cv2.CHAIN_APPROX_TC89_L1)
+    smoothened = []
+
+    for cnt in contours:
+        epsilon = 0.003*cv2.arcLength(cnt,True)
+        smoothened.append(cv2.approxPolyDP(cnt, epsilon, True))
+    final_mask = np.zeros((height, width, 3))
+    cv2.drawContours(final_mask, smoothened, -1, (1, 1, 1), -1)
+    
+    return final_mask
+
+def add_white_background(mask, image):
+    mask = cv2.blur(mask, (3, 3))
+    background = (mask * -1.0 + 1.0) * 255
+
+    image[:, :, :] = image[:, :, :] * mask + background
+    
+    return image
