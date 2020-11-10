@@ -11,6 +11,10 @@ Next, let's execute the following command in order to install all necessarry pyt
 
 And lastly, run the program with test image 'my_test.jpg'
 
-`python3 main.py`
+`python3 main.py my_test.jpg`
 
-As a result I expect you will have someting like 'my_test_result.jpg' on your screen and inside 'test_result.jpg' file.
+As a result I expect you will have a file './result/my_test.jpg' containing the segmentation.
+
+For additional help you can type
+
+`pyhton3 main.py --help`

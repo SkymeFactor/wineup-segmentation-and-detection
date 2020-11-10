@@ -5,4 +5,5 @@ opencv-python>=4.2.0
 scipy==1.4.1
 scikit-image==0.17.2
 matplotlib==3.3.2
+argparse>=1.4.0
 IPython[all]
