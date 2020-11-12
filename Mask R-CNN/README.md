@@ -9,11 +9,11 @@ Next, let's execute the following command in order to install all necessarry pyt
 
 `pip3 install -r requirements.txt`
 
-And lastly, run the program with test image 'my_test.jpg'
+And lastly, run the program with test images wihtin './Test_Images' directory
 
-`python3 main.py my_test.jpg`
+`python3 main.py`
 
-As a result I expect you will have a file './result/my_test.jpg' containing the segmentation.
+As a result I expect you will have a bunch of files in './result/' folder containing the segmentation.
 
 For additional help you can type
 

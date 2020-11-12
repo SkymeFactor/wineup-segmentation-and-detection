@@ -38,7 +38,7 @@ class SegmentationBackend():
         
         image = Image.open(image_path)
         width, height = image.size
-        np_image = np.array(image.getdata()).reshape(height, width, 3).astype(np.uint8)
+        np_image = np.array(image.getdata()).reshape([height, width, 3]).astype(np.uint8)
       
         num_detections, detection_boxes, detection_classes, detection_scores, detection_masks, image_info = self.__process_image__(
                               np_image_string)
@@ -63,7 +63,8 @@ class SegmentationBackend():
             mask += segmentations[i, :, :, np.newaxis]
         
         mask = mrcnn_utils.smooth_contours_on_mask(mask)
-        np_image = mrcnn_utils.add_white_background(mask, np_image)
+        if not mrcnn_utils.check_background_quality(mask, np_image):
+            np_image = mrcnn_utils.add_white_background(mask, np_image)
 
         return [mask, np_image]
         

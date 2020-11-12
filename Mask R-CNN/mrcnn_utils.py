@@ -62,6 +62,18 @@ def smooth_contours_on_mask(mask):
     
     return final_mask
 
+def check_background_quality(mask, image):
+    new_image = np.copy(image)
+    new_image[np.where(mask > 0)] = 0
+    background = new_image.flat[np.flatnonzero(new_image)]
+
+    if np.argmax(np.bincount(background)) > 0xE0:
+        is_good = True
+    else:
+        is_good = False
+
+    return is_good
+
 def add_white_background(mask, image):
     mask = cv2.blur(mask, (3, 3))
     background = (mask * -1.0 + 1.0) * 255
