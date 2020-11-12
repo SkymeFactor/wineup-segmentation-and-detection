@@ -22,7 +22,7 @@ if __name__ == "__main__":
         args.dest = './results'
     
     image_path = args.paths
-    output_image_path = [os.path.join(args.dest, s) for s in image_path]
+    output_image_path = [os.path.join(args.dest, os.path.split(s)[-1]) for s in image_path]
 
     # Start backend and process incoming images
     mask, images = [], []
