@@ -63,11 +63,18 @@ def smooth_contours_on_mask(mask):
     return final_mask
 
 def check_background_quality(mask, image):
-    new_image = np.copy(image)
-    new_image[np.where(mask > 0)] = 0
-    background = new_image.flat[np.flatnonzero(new_image)]
+    layer0 = np.copy(image[:, :, 0])
+    layer1 = np.copy(image[:, :, 1])
+    layer2 = np.copy(image[:, :, 2])
 
-    if np.argmax(np.bincount(background)) > 0xE0:
+    layer0[np.where(mask[:, :, 0] > 0)] = 0
+    layer1[np.where(mask[:, :, 1] > 0)] = 0
+    layer2[np.where(mask[:, :, 2] > 0)] = 0
+    max_0 = np.argmax(np.bincount(layer0.flat[np.flatnonzero(layer0)] ))
+    max_1 = np.argmax(np.bincount(layer1.flat[np.flatnonzero(layer1)] ))
+    max_2 = np.argmax(np.bincount(layer2.flat[np.flatnonzero(layer2)] ))
+
+    if max_0 > 0xE0 and max_1 > 0xE0 and max_2 > 0xE0:
         is_good = True
     else:
         is_good = False
