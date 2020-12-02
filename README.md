@@ -30,7 +30,8 @@ And finally, let's execute the example client code to test if everything works o
 `python3 request_example.py`
 
 As a result, I presume you will see the picture of a bottle with whitened background on your screen.
-Note: if you run from the docker image, make sure that you have at least the following packages installed on your system:
+
+Note: if you run from the docker image, make sure that you have at least following packages installed on your system:
     `Pillow`,
     `numpy`,
     `opencv-python`
