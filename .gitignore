@@ -1,5 +1,7 @@
-Mask\ R-CNN/__pycache__
-mrcnn/__pycache__
+MaskRCNN/__pycache__
+mrcnn_old/__pycache__
 samples/bottle/__pycache__
 .vscode
-Mask\ R-CNN/mask-rcnn
+MaskRCNN/weights
+MaskRCNN/results
+__pycache__
