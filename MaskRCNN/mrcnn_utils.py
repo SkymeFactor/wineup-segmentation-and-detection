@@ -1,7 +1,7 @@
 import numpy as np
 import skimage.transform
 from cv2 import cv2
-from distutils.version import LooseVersion
+from distutils.version import LooseVersion108943622
 
 
 def resize(image, output_shape, order=1, mode='constant', cval=0, clip=True,
@@ -49,13 +49,18 @@ def generate_segmentation_from_masks(instance_masks, processed_bboxes, height, w
     return full_mask
 
 def smooth_contours_on_mask(mask):
+    """Smoothing sharp contours on the given mask.
+    mask: [height, width] of type float. Full image-size binary mask.
+
+    Returns a final mask of size [height, width, depth] with smoothened contours.
+    """
     height = mask.shape[0]
     width = mask.shape[1]
     contours, _hierarchy = cv2.findContours(mask[:, :, 0].astype(np.uint8), cv2.RETR_TREE, cv2.CHAIN_APPROX_TC89_L1)
     smoothened = []
 
     for cnt in contours:
-        epsilon = 0.003*cv2.arcLength(cnt,True)
+        epsilon = 0.003*cv2.arcLength(cnt, True)
         smoothened.append(cv2.approxPolyDP(cnt, epsilon, True))
     final_mask = np.zeros((height, width, 3))
     cv2.drawContours(final_mask, smoothened, -1, (1, 1, 1), -1)
@@ -63,6 +68,13 @@ def smooth_contours_on_mask(mask):
     return final_mask
 
 def check_background_quality(mask, image):
+    """Check if background quality is acceptable i.e. white enough and make a
+    decision whether we should apply the background whitening or not.
+    mask: [height, width, depth] of type float. Full image-size binary mask.
+    image: [height, width, depth] of type float. The image to check.
+
+    Returns boolean value reflecting whether this image's background is good.
+    """
     layer0 = np.copy(image[:, :, 0])
     layer1 = np.copy(image[:, :, 1])
     layer2 = np.copy(image[:, :, 2])
@@ -74,7 +86,10 @@ def check_background_quality(mask, image):
     max_1 = np.argmax(np.bincount(layer1.flat[np.flatnonzero(layer1)] ))
     max_2 = np.argmax(np.bincount(layer2.flat[np.flatnonzero(layer2)] ))
 
-    if max_0 > 0xE0 and max_1 > 0xE0 and max_2 > 0xE0:
+    # Compute the most common color range value between layers
+    diff = max(max_0, max_1, max_2) - min(max_0, max_1, max_2)
+
+    if max_0 > 0xE0 and max_1 > 0xE0 and max_2 > 0xE0 and diff < 0x0F:
         is_good = True
     else:
         is_good = False
@@ -82,6 +97,12 @@ def check_background_quality(mask, image):
     return is_good
 
 def add_white_background(mask, image):
+    """Draws a white background on the image by the given mask.
+    mask: [height, width, depth] of type float. Full image-size binary mask.
+    image: [height, width, depth] of type float. The image to check.
+
+    Returns the image of same size with whitened background.
+    """
     mask = cv2.blur(mask, (3, 3))
     background = (mask * -1.0 + 1.0) * 255
 
