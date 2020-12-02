@@ -32,7 +32,7 @@ def internal_error(error):
     return make_response(jsonify({'status': 500, 'error': 'Internal server error'}), 500)
 
 
-@app.route("/segandrec/api/v1.0/segmentation", methods=['POST'])
+@app.route("/segandrec-service/api/v1.0/segmentation", methods=['POST'])
 def segmentation():
     global backend
     if not request.json or not 'image' in request.json:
