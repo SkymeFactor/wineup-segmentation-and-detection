@@ -1,4 +1,4 @@
-# Segmantation and recognition service (segandrec).
+# Segmantation and recognition service (segandrec-service).
 ## Description
 ITMO project for microservices. Provides the backend service for bottles segmentation and (not yet) mark detection.
 ## Ease-Of-Use
@@ -20,22 +20,27 @@ In order to build the docker image, run:
 
 `docker build -t flask .`
 
-Create the container and traverse the 5000 port to local machine:
+Create a container and traverse the 5000 port onto the local machine:
 
 `docker run -d -p 5000:5000 flask`
 
 ### Run client:
-And finally, let's execute the example code to test if everything works ok:
+And finally, let's execute the example client code to test if everything works ok:
 
 `python3 request_example.py`
 
-As a result I expect, you will see the picture of a bottle with whitened background on your screen.
+As a result, I presume you will see the picture of a bottle with whitened background on your screen.
+Note: if you run from the docker image, make sure that you have at least the following packages installed on your system:
+    `Pillow`,
+    `numpy`,
+    `opencv-python`
+    `requests`
 ## Responses
 ### Response structure for successful segmentations:
 ```
 JSON: {
     status: 200
-    image: [...]
+    segmentation: [...]
     mask: [...]
 }
 ```
