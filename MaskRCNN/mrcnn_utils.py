@@ -1,7 +1,7 @@
 import numpy as np
 import skimage.transform
 from cv2 import cv2
-from distutils.version import LooseVersion108943622
+from distutils.version import LooseVersion
 
 
 def resize(image, output_shape, order=1, mode='constant', cval=0, clip=True,
