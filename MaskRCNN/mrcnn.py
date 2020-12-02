@@ -1,14 +1,14 @@
-from PIL import Image
 import numpy as np
 import tensorflow as tf
 import os
-import mrcnn_utils
+from MaskRCNN import mrcnn_utils
+from cv2 import cv2
 
 
 class SegmentationBackend():
     #-----------------------------------------------------------------------------------------
     # Initialize session
-    def __init__(self, saved_model_dir='./mask-rcnn/1555659850', CUDA_is_visible=False):
+    def __init__(self, saved_model_dir=os.path.join(os.path.dirname(__file__), 'weights/'), CUDA_is_visible=False):
         if CUDA_is_visible == False:
           os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
@@ -29,19 +29,28 @@ class SegmentationBackend():
 
     #-----------------------------------------------------------------------------------------
     # Run session with image
-    def run(self, image_path, max_boxes_to_draw=50, min_score_thresh=0.8):
-        if not os.path.isfile(image_path):
-            raise Exception(('Invalid image_path={0}.').format(image_path))
-      
-        with open(image_path, 'rb') as f:
-          np_image_string = np.array([f.read()])
+    def run(self, np_image, max_boxes_to_draw=50, min_score_thresh=0.8):
+        """Explicitly running the model on a given image.
+        Parameters:
+        ----------
+        np_image: [height, width, depth] np.ndarray
+            Numpy array containing RGB image.
+        max_boxes_to_draw: int
+            Determins how many segmentations can possibly be detected (default is 50).
+        min_score_thresh: int,
+            Determins on the minimal threshold of confidence (default is 0.8).
+        Returns:
+        ----------
+        [mask, np_image] list, each element has np.ndarray type and original image size.
+        """
+        height, width, _ = np_image.shape
         
-        image = Image.open(image_path)
-        width, height = image.size
-        np_image = np.array(image.getdata()).reshape([height, width, 3]).astype(np.uint8)
-      
+        # As far as the model has it's own built in .jpg encoder, convert the array into .jpg
+        _, encoded_image = cv2.imencode('.jpg', cv2.cvtColor(np_image, cv2.COLOR_RGB2BGR))
+        encoded_image = encoded_image.tobytes()
+        
         num_detections, detection_boxes, detection_classes, detection_scores, detection_masks, image_info = self.__process_image__(
-                              np_image_string)
+                              np.array([encoded_image]) )
 
         num_detections = np.squeeze(num_detections.astype(np.int32), axis=(0,))
         detection_boxes = np.squeeze(detection_boxes * image_info[0, 2], axis=(0,))[0:num_detections]
