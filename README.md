@@ -34,7 +34,7 @@ As a result, I presume you will see the picture of a bottle with whitened backgr
 Note: if you run from the docker image, make sure that you have at least following packages installed on your system:
     `Pillow`,
     `numpy`,
-    `opencv-python`
+    `opencv-python`,
     `requests`
 ## Responses
 ### Response structure for successful segmentations:
