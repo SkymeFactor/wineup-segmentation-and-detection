@@ -9,25 +9,25 @@ https://drive.google.com/file/d/17lry_2h-Pr3PsasJHtmGz922mjt3CAWc/view?usp=shari
 ### Run Locally:
 Let's execute the following command in order to install all necessarry python libraries:
 
-`pip3 install -r requirements.txt`
+    `pip3 install -r requirements.txt`
 
 Now, run the flask backend program by executing:
 
-`python3 app.py` or `flask run -h 0.0.0.0 -p 5000`
+    `python3 app.py` or `flask run -h 0.0.0.0 -p 5000`
 
 ### Run using docker container:
 In order to build the docker image, run:
 
-`docker build -t flask .`
+    `docker build -t flask .`
 
 Create the container and traverse the 5000 port to local machine:
 
-`docker run -d -p 5000:5000 flask`
+    `docker run -d -p 5000:5000 flask`
 
 ### Run client:
 And finally, let's execute the example code to test if everything works ok:
 
-`python3 request_example.py`
+    `python3 request_example.py`
 
 As a result I expect, you will see the picture of a bottle with whitened background on your screen.
 ## Responses
