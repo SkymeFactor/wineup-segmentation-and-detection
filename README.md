@@ -5,7 +5,7 @@ ITMO project for microservices. Provides the backend service for bottles segment
 First of all, let's download the checkpoints of pre-trained mask-rcnn and unpack them into ./MaskRCNN/weights folder. You must make sure that files ./MaskRCNN/weights/variables/ and ./MaskRCNN/weights/saved_model.pb are available from here by exact same paths.
 
 Tensorflow checkpoints are publicly available by link:
-https://drive.google.com/file/d/17lry_2h-Pr3PsasJHtmGz922mjt3CAWc/view?usp=sharing
+https://drive.google.com/file/d/1Y2YSaUfsKISgbVzDlibVWYbj4bTfUN_1/view?usp=sharing
 ### Run Locally:
 Let's execute the following command in order to install all necessarry python libraries:
 
