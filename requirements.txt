@@ -7,3 +7,4 @@ matplotlib==3.3.2
 argparse==1.4.0
 requests==2.23.0
 Flask==1.1.2
+Pillow==7.2
