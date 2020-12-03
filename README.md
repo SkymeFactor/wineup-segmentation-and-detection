@@ -6,7 +6,7 @@ First of all, let's download the checkpoints of pre-trained mask-rcnn and unpack
 
 Tensorflow checkpoints are publicly available by link:
 https://drive.google.com/file/d/1Y2YSaUfsKISgbVzDlibVWYbj4bTfUN_1/view?usp=sharing
-### Run Locally:
+### Run server locally:
 Let's execute the following command in order to install all necessarry python libraries:
 
 `pip3 install -r requirements.txt`
@@ -15,7 +15,7 @@ Now, run the flask backend program by executing:
 
 `python3 app.py` or `flask run -h 0.0.0.0 -p 5000`
 
-### Run using docker container:
+### Run server using docker container:
 In order to build the docker image, run:
 
 `docker build -t flask .`
