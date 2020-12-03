@@ -14,7 +14,7 @@ data = {
 }
 
 # POST image to server and collect the response
-response = requests.post("http://localhost:5000/segandrec/api/v1.0/segmentation", json=data)
+response = requests.post("http://localhost:5000/segandrec-service/api/v1.0/segmentation", json=data)
 
 # Check if response is valide
 if response.json()['status'] == 200:
