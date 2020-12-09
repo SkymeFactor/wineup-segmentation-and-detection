@@ -1,6 +1,9 @@
 # Segmantation and recognition service (segandrec-service).
 ## Description
 ITMO project for microservices. Provides the backend service for bottles segmentation and (not yet) mark detection.
+### Models used:
+ - Mask-RCNN for segmentation
+ - Exception (probably) for mark detection
 ## Ease-Of-Use
 First of all, let's download the checkpoints of pre-trained mask-rcnn and unpack them into ./MaskRCNN/weights folder. You must make sure that files ./MaskRCNN/weights/variables/ and ./MaskRCNN/weights/saved_model.pb are available from here by exact same paths.
 
@@ -36,7 +39,17 @@ Note: if you run from the docker image, make sure that you have at least followi
     `numpy`,
     `opencv-python`,
     `requests`
-## Responses
+## API Documentation:
+Segmentation has to be performed by the following scenario:
+`http://IP:PORT/api/v1.0/segmentation`
+
+As s DATA parameter you should be sending JSON structure containing image as a list (np.tolist() for example)
+### JSON Request structure:
+```
+JSON: {
+    image: [...]
+}
+```
 ### Response structure for successful segmentations:
 ```
 JSON: {
