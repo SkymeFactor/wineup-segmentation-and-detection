@@ -18,7 +18,7 @@ backend = mrcnn.SegmentationBackend(CUDA_is_visible=False)
 
 # Set up swagger addresses (i.e. base and redirect)
 SWAGGER_URL = '/api/v1.0/swagger-ui'
-API_URL = 'http://localhost:5000/api/v1.0/swagger.json'
+API_URL = 'http://77.234.215.138:18080/ml4-recommendation-service/api/v1.0/swagger.json'
 
 @app.errorhandler(400)
 def bad_request(error):
@@ -71,7 +71,7 @@ swaggerui_blueprint = get_swaggerui_blueprint(
     SWAGGER_URL, 
     API_URL,
     config={
-        'app_name': "Test application"
+        'app_name': "Seg&Rec-service"
     }
 )
 
