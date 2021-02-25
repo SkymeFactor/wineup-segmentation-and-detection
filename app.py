@@ -1,7 +1,8 @@
 from __future__ import unicode_literals
 
-import sys, os
+import sys, os, json
 from flask import Flask, request, jsonify, make_response, abort
+from flask_swagger_ui import get_swaggerui_blueprint
 from cv2 import cv2
 # Append MaskRCNN to sys.path.  --->  Now deprecated.
 #sys.path.insert(1, os.path.join(sys.path[0], 'MaskRCNN'))
@@ -14,6 +15,10 @@ app = Flask(__name__)
 sessionStorage = {}
 
 backend = mrcnn.SegmentationBackend(CUDA_is_visible=False)
+
+# Set up swagger addresses (i.e. base and redirect)
+SWAGGER_URL = '/api/v1.0/swagger-ui'
+API_URL = 'http://localhost:5000/api/v1.0/swagger.json'
 
 @app.errorhandler(400)
 def bad_request(error):
@@ -53,5 +58,25 @@ def segmentation():
 
     return jsonify(response)
 
+
+@app.route("/api/v1.0/swagger.json", methods=['GET'])
+def get_swagger_json():
+    with open ("swagger.json") as f:
+        swagger_data = json.load(f)
+    f.close()
+    return jsonify(swagger_data)
+
+# Create swagger UI blueprint
+swaggerui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL, 
+    API_URL,
+    config={
+        'app_name': "Test application"
+    }
+)
+
+# Register swagger UI blueprint
+app.register_blueprint(swaggerui_blueprint)
+
 if __name__ == "__main__":
-    app.run(debug=False, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5000)
