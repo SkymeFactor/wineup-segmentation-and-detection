@@ -3,6 +3,7 @@ tensorflow>=2.2.0
 opencv-python>=4.2.0
 scipy==1.4.1
 scikit-image==0.17.2
+matplotlib==3.3.2
 requests==2.23.0
 Flask==1.1.2
 flask-swagger-ui==3.36.0
