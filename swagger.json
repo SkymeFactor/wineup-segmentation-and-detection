@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "API сервиса для сегментации и распознавания фотографий вин",
-        "version": "1.1.0",
+        "version": "0.1.1",
         "title": "ML-4 Segmentation & Recognition service",
         "contact": {
             "name": "Notion документация проекта",
@@ -16,8 +16,8 @@
     "schemes": [
         "http"
     ],
-    "host": "77.234.215.138:18080",
-    "basePath": "/ml4-recommendation-service/api/v1.0",
+    "host": "77.234.215.138:18080/ml4-recommendation-service",
+    "basePath": "/api/v1.0",
     "tags": [{
         "name": "Segmentation",
         "description": "Backend image segmentation"
