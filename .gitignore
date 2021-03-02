@@ -5,3 +5,4 @@ samples/bottle/__pycache__
 MaskRCNN/weights
 MaskRCNN/results
 __pycache__
+.old_trash
