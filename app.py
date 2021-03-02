@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
 import sys, os, json, time
-from flask import Flask, request, jsonify, make_response, abort, send_file
+from flask import Flask, request, jsonify, make_response, abort, send_file, render_template
 from flask_swagger_ui import get_swaggerui_blueprint
 from cv2 import cv2
 from io import BytesIO
@@ -22,8 +22,12 @@ backend = mrcnn.SegmentationBackend(CUDA_is_visible=False)
 
 # Set up swagger addresses (i.e. base and redirect)
 base_url = 'http://77.234.215.138:18080/ml4-recommendation-service'
-SWAGGER_URL = base_url + '/api/v1.0/swagger-ui'
+SWAGGER_URL = '/api/v1.0/swagger-ui'
 API_URL = base_url + '/api/v1.0/swagger.json'
+
+@app.route('/api/v1.0/docs', methods=['GET'])
+def get_swagger():
+    return render_template('swaggerui.html')
 
 @app.errorhandler(400)
 def bad_request(error):
@@ -148,4 +152,4 @@ if __name__ == "__main__":
     )
     # Register swagger UI blueprint
     app.register_blueprint(swaggerui_blueprint)
-    app.run(debug=False, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5000)

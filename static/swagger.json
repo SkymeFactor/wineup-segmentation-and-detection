@@ -1,0 +1,115 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API сервиса для сегментации и распознавания фотографий вин",
+        "version": "0.1.1",
+        "title": "ML-4 Segmentation & Recognition service",
+        "contact": {
+            "name": "Notion документация проекта",
+            "url": "https://www.notion.so/Project-info-cf53186b5d4f453b95b50d5a0d82ca82"
+        },
+        "license": {
+            "name": "GPL License",
+            "url": "http://www.gnu.org/licenses/gpl.html"
+        }
+    },
+    "schemes": [
+        "http"
+    ],
+    "host": "77.234.215.138:18080/ml4-recommendation-service",
+    "basePath": "/api/v1.0",
+    "tags": [{
+        "name": "Segmentation",
+        "description": "Backend image segmentation"
+    }],
+    "paths": {
+        "/segmentation": {
+            "post": {
+                "tags": [
+                    "Segmentation"
+                ],
+                "summary": "separate image from it's background",
+                "operationId": "segmentationUsingPost",
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "description": "JSONified numpy image",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/Request"
+                    }
+                }],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "deprecated": false
+            }
+        }
+    },
+    "definitions": {
+        "Request": {
+            "type": "object",
+            "properties": {
+                "image": {
+                    "type": "array",
+                    "example": [
+                        [
+                            [1, 2, 3]
+                        ]
+                    ]
+                }
+            }
+        },
+        "Response": {
+            "type": "object",
+            "properties": {
+                "mask": {
+                    "$ref": "#/definitions/Image"
+                },
+                "segmentation": {
+
+                },
+                "status": {
+                    "type": "integer"
+                }
+            },
+            "title": "Response"
+        },
+        "Image": {
+            "type": "object",
+            "properties": {
+                "Numpy-Image": {
+                    "type": "object"
+                }
+            },
+            "title": "Image"
+        }
+    },
+    "externalDocs": {
+        "description": "Find out more about Swagger",
+        "url": "http://swagger.io"
+    }
+}
