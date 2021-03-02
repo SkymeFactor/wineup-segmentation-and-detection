@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "API сервиса для сегментации и распознавания фотографий вин",
-        "version": "0.1.1",
+        "version": "0.1.2",
         "title": "ML-4 Segmentation & Recognition service",
         "contact": {
             "name": "Notion документация проекта",
@@ -16,24 +16,28 @@
     "schemes": [
         "http"
     ],
-    "host": "77.234.215.138:18080/ml4-recommendation-service",
     "basePath": "/api/v1.0",
     "tags": [{
-        "name": "Segmentation",
-        "description": "Backend image segmentation"
-    }],
+            "name": "Segmentation",
+            "description": "Backend image segmentation"
+        },
+        {
+            "name": "Get Image",
+            "description": "Getting of hosted image"
+        }
+    ],
     "paths": {
         "/segmentation": {
             "post": {
                 "tags": [
                     "Segmentation"
                 ],
-                "summary": "separate image from it's background",
+                "summary": "Separates image from it's background",
                 "operationId": "segmentationUsingPost",
                 "parameters": [{
                     "in": "body",
                     "name": "body",
-                    "description": "JSONified numpy image",
+                    "description": "Link to JPEG image",
                     "required": true,
                     "schema": {
                         "$ref": "#/definitions/Request"
@@ -67,6 +71,46 @@
                 },
                 "deprecated": false
             }
+        },
+        "/get_image={image}": {
+            "get": {
+                "tags": [
+                    "Get Image"
+                ],
+                "summary": "Requests image by it's internal name",
+                "operationId": "segmentationUsingPost",
+                "parameters": [{
+                    "in": "path",
+                    "name": "image",
+                    "description": "Generated image name",
+                    "required": true,
+                    "schema": {
+                        "type": "string",
+                        "example": "test"
+                    }
+                }],
+                "produces": [
+                    "multipart/form-data"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "deprecated": false
+            }
         }
     },
     "definitions": {
@@ -74,38 +118,26 @@
             "type": "object",
             "properties": {
                 "image": {
-                    "type": "array",
-                    "example": [
-                        [
-                            [1, 2, 3]
-                        ]
-                    ]
+                    "type": "string",
+                    "example": "https://sun9-4.userapi.com/impg/qXMKQzs91vqO_PESPteoi45CbKvj1hWNQ8Y6HA/X3Y8CJaAsFg.jpg?size=608x1080&quality=96&sign=a73c97e94d6e7ebe73b289e7259180f8&type=album"
                 }
-            }
+            },
+            "title": "Segmentation Request"
         },
         "Response": {
             "type": "object",
             "properties": {
                 "mask": {
-                    "$ref": "#/definitions/Image"
+                    "type": "string"
                 },
                 "segmentation": {
-
+                    "type": "string"
                 },
                 "status": {
                     "type": "integer"
                 }
             },
-            "title": "Response"
-        },
-        "Image": {
-            "type": "object",
-            "properties": {
-                "Numpy-Image": {
-                    "type": "object"
-                }
-            },
-            "title": "Image"
+            "title": "Segmentation Response"
         }
     },
     "externalDocs": {

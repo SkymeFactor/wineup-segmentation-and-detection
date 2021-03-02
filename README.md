@@ -9,6 +9,8 @@ First of all, let's download the checkpoints of pre-trained mask-rcnn and unpack
 
 Tensorflow checkpoints are publicly available by link:
 https://drive.google.com/file/d/1Y2YSaUfsKISgbVzDlibVWYbj4bTfUN_1/view?usp=sharing
+
+Next big thing is changing the host file to contain the address you will need (e.g. http://localhost:5000)
 ### Run server locally:
 Let's execute the following command in order to install all necessarry python libraries:
 
@@ -40,6 +42,10 @@ Note: if you run from the docker image, make sure that you have at least followi
     `opencv-python`,
     `requests`
 ## API Documentation:
+You can see more about the service API by running it on your local machine and following the swagger link:
+`http://IP:PORT/api/v1.0/swagger_ui`
+
+
 Segmentation has to be performed by the following scenario:
 `http://IP:PORT/api/v1.0/segmentation`
 
@@ -47,15 +53,15 @@ As s DATA parameter you should be sending JSON structure containing image as a l
 ### JSON Request structure:
 ```
 JSON: {
-    image: [...]
+    image: "link"
 }
 ```
 ### Response structure for successful segmentations:
 ```
 JSON: {
     status: 200
-    segmentation: [...]
-    mask: [...]
+    segmentation: "link"
+    mask: "link"
 }
 ```
 ### Response structure for errors 400, 404, 405 and 500:
