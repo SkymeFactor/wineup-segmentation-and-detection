@@ -36,11 +36,12 @@ And finally, let's execute the example client code to test if everything works o
 
 As a result, I presume you will see the picture of a bottle with whitened background on your screen.
 
-Note: if you run from the docker image, make sure that you have at least following packages installed on your system:
+Note: if you are running NOT from docker image, make sure that you have at least following packages installed on your system:
     `Pillow`,
     `numpy`,
     `opencv-python`,
-    `requests`
+    `requests`,
+    `tensorflow`
 ## API Documentation:
 You can see more about the service API by running it on your local machine and following the swagger link:
 `http://IP:PORT/api/v1.0/swagger_ui`

@@ -1,16 +1,12 @@
-import requests
-import numpy as np
-from PIL import Image
-from cv2 import cv2
+from __future__ import unicode_literals
 
-# Open the image
-image = Image.open("./Test_Images/test2.jpg")
-width, height = image.size
-np_image = np.array(image.getdata()).reshape([height, width, 3]).astype(np.uint8)
+import requests
+from PIL import Image
+from io import BytesIO
 
 # Form the request
 data = {
-    "image": np_image.tolist()
+    "image": 'https://sun9-4.userapi.com/impg/qXMKQzs91vqO_PESPteoi45CbKvj1hWNQ8Y6HA/X3Y8CJaAsFg.jpg?size=608x1080&quality=96&sign=a73c97e94d6e7ebe73b289e7259180f8&type=album'#'https://www.rostovmilo.ru/wa-data/public/shop/products/96/80/28096/images/1948/1948.970.jpeg'#np_image.tolist()
 }
 
 # POST image to server and collect the response
@@ -18,14 +14,12 @@ response = requests.post("http://localhost:5000/api/v1.0/segmentation", json=dat
 
 # Check if response is valide
 if response.json()['status'] == 200:
-    # Print the image size
-    print(np.array(response.json()["segmentation"]).astype(np.uint8).shape)
+    # Print the image link
+    print(response.json()['segmentation'])
+    # Get the image from link in respone
+    image = Image.open(BytesIO(requests.get(response.json()['segmentation']).content))
     # Draw it on your screen
-    cv2.namedWindow("Image", cv2.WINDOW_NORMAL)
-    cv2.resizeWindow("Image", 800, 600)
-    cv2.imshow("Image", cv2.cvtColor(np.array(response.json()["segmentation"]).astype(np.uint8), cv2.COLOR_RGB2BGR))
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    image.show()
 else:
-    # If the response is invalide, show the error message
+    # If the response is invalid, show the error message
     print('Error ' + str(response.json()['status']) + ': ' + response.json()['error'])
