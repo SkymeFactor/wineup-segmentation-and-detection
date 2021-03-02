@@ -117,7 +117,7 @@ def get_swagger_json():
     with open ("./static/swagger.json") as f:
         swagger_data = json.load(f)
     f.close()
-    swagger_data.update({"host": base_url})
+    swagger_data.update({"host": base_url.replace('http://', '')})
     return jsonify(swagger_data)
 
 @app.route('/api/v1.0/swagger_ui', methods=['GET'])
