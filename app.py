@@ -22,7 +22,7 @@ backend = mrcnn.SegmentationBackend(CUDA_is_visible=False)
 
 # Set up swagger addresses (i.e. base and redirect)
 base_url = 'http://77.234.215.138:18080/ml4-recommendation-service'
-SWAGGER_URL = '/api/v1.0/swagger-ui'
+SWAGGER_URL = base_url + '/api/v1.0/swagger-ui'
 API_URL = base_url + '/api/v1.0/swagger.json'
 
 @app.errorhandler(400)
