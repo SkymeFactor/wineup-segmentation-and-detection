@@ -1,11 +1,11 @@
-numpy==1.18.5
+numpy>=1.18.5
 tensorflow>=2.2.0
 opencv-python>=4.2.0
 scipy==1.4.1
 scikit-image==0.17.2
 matplotlib==3.3.2
-argparse==1.4.0
-requests==2.23.0
+#argparse==1.4.0
+requests>=2.23.0
 Flask==1.1.2
 Pillow==7.2
 flask-swagger-ui==3.36.0
