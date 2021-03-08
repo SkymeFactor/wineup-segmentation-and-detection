@@ -8,6 +8,7 @@ from threading import Thread
 import requests, string, random
 from MaskRCNN import mrcnn
 import numpy as np
+import kafka_controller
 
 # Create flask application
 app = Flask(__name__)
@@ -132,6 +133,11 @@ def get_swagger():
         standalone_preset_js = base_url + '/static/js/swagger-ui-standalone-preset.js',
         swagger_json = base_url + '/api/v1.0/swagger.json'
     )
+
+@app.route('/api/v1.0/test_kafka', methods=['GET'])
+def test_kafka():
+    kafka_log = kafka_controller.kafka_try_send()
+    return jsonify(kafka_log)
 
 if __name__ == "__main__":
     # Run flask app in broadcasting mode
