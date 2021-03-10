@@ -50,7 +50,7 @@ You can see more about the service API by running it on your local machine and f
 Segmentation has to be performed by the following scenario:
 `http://IP:PORT/api/v1.0/segmentation`
 
-As s DATA parameter you should be sending JSON structure containing image as a list (np.tolist() for example)
+As s DATA parameter you should be sending JSON structure containing link to image
 ### JSON Request structure:
 ```
 JSON: {
