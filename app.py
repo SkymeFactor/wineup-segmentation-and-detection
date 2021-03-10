@@ -12,6 +12,7 @@ import kafka_controller
 
 # Create flask application
 app = Flask(__name__)
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
 # Create mrcnn backend
 backend = mrcnn.SegmentationBackend(CUDA_is_visible=False)
