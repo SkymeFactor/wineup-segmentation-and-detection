@@ -1,16 +1,16 @@
 from __future__ import unicode_literals
 
-import segmentation_pb2 as msg
+import NewSegmentationIsReadyEvent_pb2 as msg
 from kafka import KafkaConsumer, KafkaProducer
 
-topic = 'unknown_topic'
+topic = 'eventTopic'
 
 log = []
 
 def connect_kafka_producer():
     _producer = None
     try:
-        _producer = KafkaProducer(bootstrap_servers=['kafka:9092'])
+        _producer = KafkaProducer(bootstrap_servers=['localhost:9092'])
     except Exception:
         log.append('producer connection failed')
         pass
@@ -35,7 +35,7 @@ def get_message(consumer):
     links = []
     for message in consumer:
         value = message.value
-        link = msg.Segmentation()
+        link = msg.NewSegmentationIsReadyEvent()
         link.ParseFromString(value)
         log.append('Message successfully received')
         #log.append(str(link))
@@ -44,19 +44,19 @@ def get_message(consumer):
 
 def kafka_try_send():
     producer = connect_kafka_producer()
-    consumer = KafkaConsumer(topic, bootstrap_servers=['kafka:9092'], auto_offset_reset='earliest')
+    consumer = KafkaConsumer(topic, bootstrap_servers=['localhost:9092'], auto_offset_reset='earliest')
 
-    segm = msg.Segmentation()
+    segm = msg.NewSegmentationIsReadyEvent()
 
-    segm.segm_link = "http://nowhere"
-    segm.mask_link = "http://non-existent"
-    segm.id = 1
+    segm.segmLink = "http://nowhere"
+    segm.maskLink = "http://non-existent"
+    segm.wineId   = "1"
 
     #serialized = segm.SerializeToString()
 
     log.append(str(segm))
 
-    publish_message(producer, topic, segm)#'msg', str(serialized))
+    publish_message(producer, topic, segm) #'msg', str(serialized))
     links = get_message(consumer)
 
     log.append(str(links[0]))
@@ -67,7 +67,7 @@ def kafka_try_send():
 
     return d
 
-#print(json.dumps(kafka_try_send()))
+print(kafka_try_send())
 
 # Test that the protobuf serialize and de-serialize methods are working fine
 '''

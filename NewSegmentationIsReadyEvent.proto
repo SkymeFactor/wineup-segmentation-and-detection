@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package ml4_segandrec_service;
+
+// Event that indicates that the new segmentation is ready
+message NewSegmentationIsReadyEvent {
+    string wineId = 3;
+    string segmLink = 1;
+    string maskLink = 2;
+}

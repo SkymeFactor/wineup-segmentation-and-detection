@@ -1,9 +1,0 @@
-syntax = "proto3";
-
-package ml4_segandrec_service;
-
-message Segmentation {
-    string segm_link = 1;
-    string mask_link = 2;
-    int64  id = 3;
-}
