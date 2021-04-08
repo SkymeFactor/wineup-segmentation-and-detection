@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+option java_package = "com.wine.to.up.catalog.service.api.message";
+
+import "kafka_message_header.proto";
+
+//event that indicates that message was sent to kafka
+message NewWineSavedMessageSentEvent {
+  string wineId = 1;
+  string wineName = 2;
+  string wineDescription = 3;
+  repeated KafkaMessageHeader headers = 4;
+}
