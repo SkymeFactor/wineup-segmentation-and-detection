@@ -1,8 +1,10 @@
 import os
 
-# Kafka topics
+
+# Kafka
 NEW_WINE_MESSAGE_SENT_TOPIC = 'eventTopic'
 NEW_SEGMENTATION_IS_READY_TOPIC = 'segmentedImage'
+KAFKA_POLLING_TIMEOUT = int(os.getenv('KAFKA_POLLING_TIMEOUT', '30'))
 
 # hosts
 _WINE_UP_DOMAIN_ADDRESS = 'http://77.234.215.138:18080'

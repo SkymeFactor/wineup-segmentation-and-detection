@@ -24,6 +24,8 @@ app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 # Create mrcnn backend
 backend = mrcnn.SegmentationBackend(CUDA_is_visible=False)
 
+kafka_thread = Thread(target=kafka_controller.serve, name='kafka_thread')
+
 
 @app.errorhandler(400)
 def bad_request(error) -> flask.Response:
@@ -82,10 +84,6 @@ def segmentation() -> flask.Response:
     # Check if we have a valid request structure
     if not flask.request.json or 'image' not in flask.request.json:
         return flask.abort(400)
-    # Create response's basic structure
-    response = {
-        'status': 200
-    }
 
     # Obtain the image by link
     file_request = requests.get(flask.request.json['image'])
@@ -123,13 +121,11 @@ def segmentation() -> flask.Response:
     # Start the delayed deletion procedure
     Thread(target=image_autoremove, args=[mask_name, segm_name]).start()
 
-    # Form response fields
-    response.update(
-        {"segmentation": config.RECOMMENDATION_GET_IMAGE_ENDPOINT + segm_name}
-    )
-    response.update({"mask": config.RECOMMENDATION_GET_IMAGE_ENDPOINT + mask_name})
-
-    return flask.jsonify(response)
+    return flask.jsonify({
+        'status': 200,
+        'segmentation': config.RECOMMENDATION_GET_IMAGE_ENDPOINT + segm_name,
+        'mask': config.RECOMMENDATION_GET_IMAGE_ENDPOINT + mask_name,
+    })
 
 
 @app.route("/api/v1.0/get_image=<img_name>", methods=['GET'])
@@ -175,4 +171,5 @@ def test_kafka() -> str:
 
 if __name__ == "__main__":
     # Run flask app in broadcasting mode
+    kafka_thread.start()
     app.run(debug=False, host='0.0.0.0', port=5000)
