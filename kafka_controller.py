@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import logging
 import typing
 
@@ -39,6 +37,7 @@ def publish_message(
         log.error("Failed to publish message", exc_info=error)
 
 
+# TODO: determine the returned type
 def get_message(consumer: KafkaConsumer) -> typing.List[typing.Any]:
     links = []
     for message in consumer:
