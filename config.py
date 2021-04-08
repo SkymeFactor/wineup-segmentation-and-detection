@@ -44,7 +44,7 @@ logging.config.dictConfig(
         },
         'root': {
             'handlers': ['console'],
-            'level': os.getenv('LOGGING_LEVEL', 'DEBUG'),
+            'level': os.getenv('LOGGING_LEVEL', 'INFO'),
         },
     }
 )
