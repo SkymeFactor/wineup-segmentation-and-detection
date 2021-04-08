@@ -85,23 +85,31 @@ def create_segmentation_event(wine_id: str, link: str) -> NewSegmentationIsReady
     return segmentation
 
 
+def process_message(
+    message: NewWineSavedMessageSentEvent , producer: KafkaProducer
+) -> None:
+    wine_id = message.wineId
+    wine_image_link = get_wine_image_link(wine_id)
+
+    segmentation_event = create_segmentation_event(wine_id, wine_image_link)
+
+    publish_message(
+        producer,
+        topic_name=config.NEW_SEGMENTATION_IS_READY_TOPIC,
+        data=segmentation_event,
+    )
+
+
 def process_messages(consumer: KafkaConsumer, producer: KafkaProducer) -> None:
-    for message in consumer:
-        value = message.value
+    for raw_message in consumer:
+        value = raw_message.value
         msg = NewWineSavedMessageSentEvent()
         msg.ParseFromString(value)
         log.info("Received NewWineSavedMessageSentEvent: %s", msg)
-
-        wine_id = msg.wineId
-        wine_image_link = get_wine_image_link(wine_id)
-
-        segmentation_event = create_segmentation_event(wine_id, wine_image_link)
-
-        publish_message(
-            producer,
-            topic_name=config.NEW_SEGMENTATION_IS_READY_TOPIC,
-            data=segmentation_event,
-        )
+        try:
+            process_message(msg, producer)
+        except Exception as error:
+            log.error("Failed to process message %s", msg, exc_info=error)
 
 
 def kafka_try_send() -> None:
