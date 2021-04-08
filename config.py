@@ -1,3 +1,4 @@
+import logging.config
 import os
 
 
@@ -23,3 +24,26 @@ CATALOG_POSITION_BY_ID_CONTROLLER = f'{_CATALOG_SERVICE_HOST}/position/true/byId
 RECOMMENDATION_SERVICE_API = f'{RECOMMENDATION_SERVICE_HOST}/api/v1.0'
 RECOMMENDATION_SEGMENTATION_ENDPOINT = f'{RECOMMENDATION_SERVICE_API}/segmentation'
 RECOMMENDATION_GET_IMAGE_ENDPOINT = f'{RECOMMENDATION_SERVICE_API}/get_image='
+
+logging.config.dictConfig(
+    {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'simple': {
+                'format': '{asctime} {levelname} {name}:{lineno} - {message}',
+                'style': '{',
+            },
+        },
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler',
+                'formatter': 'simple',
+            },
+        },
+        'root': {
+            'handlers': ['console'],
+            'level': os.getenv('LOGGING_LEVEL', 'DEBUG'),
+        },
+    }
+)
