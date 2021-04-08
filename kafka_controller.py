@@ -112,12 +112,12 @@ def process_messages(consumer: KafkaConsumer, producer: KafkaProducer) -> None:
             log.error("Failed to process message %s", msg, exc_info=error)
 
 
-def kafka_try_send() -> None:
+def kafka_try_send(wine_id: str) -> None:
     catalog_producer = connect_kafka_producer()
 
     event = NewWineSavedMessageSentEvent()
 
-    event.wineId = "1"
+    event.wineId = wine_id
     event.SerializeToString()
     publish_message(catalog_producer, config.NEW_WINE_MESSAGE_SENT_TOPIC, event)
 

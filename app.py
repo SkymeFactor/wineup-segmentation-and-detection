@@ -165,7 +165,8 @@ def get_swagger() -> flask.Response:
 
 @app.route('/api/v1.0/test_kafka', methods=['GET'])
 def test_kafka() -> str:
-    kafka_controller.kafka_try_send()
+    wine_id = flask.request.args.get('wine_id', '1')
+    kafka_controller.kafka_try_send(wine_id)
     return "Sent kafka message"
 
 
