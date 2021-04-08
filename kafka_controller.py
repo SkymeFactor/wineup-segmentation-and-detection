@@ -138,7 +138,7 @@ def serve() -> None:
     producer = connect_kafka_producer()
     consumer = KafkaConsumer(
         config.NEW_WINE_MESSAGE_SENT_TOPIC,
-        bootstrap_servers=['localhost:9092'],
+        bootstrap_servers=config.KAFKA_BOOTSTRAP_SERVERS,
         auto_offset_reset='earliest',
     )
     while True:
