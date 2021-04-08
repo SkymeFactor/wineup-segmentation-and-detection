@@ -1,12 +1,16 @@
-from __future__ import unicode_literals
-
 import requests
 from PIL import Image
 from io import BytesIO
 
 # Form the request
 data = {
-    "image": 'https://sun9-4.userapi.com/impg/qXMKQzs91vqO_PESPteoi45CbKvj1hWNQ8Y6HA/X3Y8CJaAsFg.jpg?size=608x1080&quality=96&sign=a73c97e94d6e7ebe73b289e7259180f8&type=album'#'https://www.rostovmilo.ru/wa-data/public/shop/products/96/80/28096/images/1948/1948.970.jpeg'#np_image.tolist()
+    'image': (
+        'https://sun9-4.userapi.com/impg/qXMKQzs91vqO_PESPteoi45CbKvj1hWNQ8Y6HA/'
+        'X3Y8CJaAsFg.jpg?size=608x1080&quality=96&sign=a73c97e94d6e7ebe73b289e7259180f8'
+        '&type=album'
+    )
+    # https://www.rostovmilo.ru/wa-data/public/shop/products/96/80/28096/images/1948/1948.970.jpeg
+    # np_image.tolist()
 }
 
 # POST image to server and collect the response
