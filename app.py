@@ -12,6 +12,7 @@ import numpy as np
 import requests
 from PIL import Image
 
+import config
 import kafka_controller
 from MaskRCNN import mrcnn
 
@@ -22,10 +23,6 @@ app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
 # Create mrcnn backend
 backend = mrcnn.SegmentationBackend(CUDA_is_visible=False)
-
-# Set up base url address
-with open("./host", 'r') as file:
-    base_url = file.read()
 
 
 @app.errorhandler(400)
@@ -127,8 +124,10 @@ def segmentation() -> flask.Response:
     Thread(target=image_autoremove, args=[mask_name, segm_name]).start()
 
     # Form response fields
-    response.update({"segmentation": base_url + '/api/v1.0/get_image=' + segm_name})
-    response.update({"mask": base_url + '/api/v1.0/get_image=' + mask_name})
+    response.update(
+        {"segmentation": config.RECOMMENDATION_GET_IMAGE_ENDPOINT + segm_name}
+    )
+    response.update({"mask": config.RECOMMENDATION_GET_IMAGE_ENDPOINT + mask_name})
 
     return flask.jsonify(response)
 
@@ -147,21 +146,24 @@ def get_image_from_temp(img_name: str) -> flask.Response:
 def get_swagger_json():
     with open("./static/swagger.json") as f:
         swagger_data = json.load(f)
-    swagger_data.update({"host": base_url.replace('http://', '')})
+    swagger_data.update(
+        {"host": config.RECOMMENDATION_SERVICE_HOST.replace('http://', '')}
+    )
     return flask.jsonify(swagger_data)
 
 
 @app.route('/api/v1.0/swagger_ui', methods=['GET'])
 def get_swagger() -> flask.Response:
     # Render swagger-ui page
+    static_url_prefix = f'{config.RECOMMENDATION_SERVICE_HOST}/static'
     return flask.render_template(
         template_name_or_list='swaggerui.html',
-        css=base_url + '/static/css/swagger-ui.css',
-        fav32=base_url + '/static/img/favicon-32x32.png',
-        fav16=base_url + '/static/img/favicon-16x16.png',
-        bundle_js=base_url + '/static/js/swagger-ui-bundle.js',
-        standalone_preset_js=base_url + '/static/js/swagger-ui-standalone-preset.js',
-        swagger_json=base_url + '/api/v1.0/swagger.json'
+        css=f'{static_url_prefix}/css/swagger-ui.css',
+        fav32=f'{static_url_prefix}/img/favicon-32x32.png',
+        fav16=f'{static_url_prefix}/img/favicon-16x16.png',
+        bundle_js=f'{static_url_prefix}/js/swagger-ui-bundle.js',
+        standalone_preset_js=f'{static_url_prefix}/js/swagger-ui-standalone-preset.js',
+        swagger_json=f'{static_url_prefix}/v1.0/swagger.json'
     )
 
 

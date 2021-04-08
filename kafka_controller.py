@@ -3,10 +3,9 @@ import typing
 
 from kafka import KafkaConsumer, KafkaProducer
 
+import config
 import NewSegmentationIsReadyEvent_pb2 as msg
 
-
-EVENT_TOPIC = 'eventTopic'
 
 log = logging.getLogger(__name__)
 
@@ -22,7 +21,7 @@ def connect_kafka_producer() -> KafkaProducer:
 
 
 def publish_message(
-        producer: KafkaProducer, topic_name: str, data: msg.NewSegmentationIsReadyEvent
+    producer: KafkaProducer, topic_name: str, data: msg.NewSegmentationIsReadyEvent
 ) -> None:
     try:
         # key_bytes = bytes(str(key), encoding='utf-8')
@@ -53,7 +52,9 @@ def get_message(consumer: KafkaConsumer) -> typing.List[typing.Any]:
 def kafka_try_send() -> None:
     producer = connect_kafka_producer()
     consumer = KafkaConsumer(
-        EVENT_TOPIC, bootstrap_servers=['localhost:9092'], auto_offset_reset='earliest'
+        config.NEW_WINE_MESSAGE_SENT_TOPIC,
+        bootstrap_servers=['localhost:9092'],
+        auto_offset_reset='earliest',
     )
 
     segm = msg.NewSegmentationIsReadyEvent()
@@ -64,9 +65,9 @@ def kafka_try_send() -> None:
 
     # serialized = segm.SerializeToString()
 
-    log.info("Sent event %s", segm)
+    log.info("Sent event: %s", segm)
 
-    publish_message(producer, EVENT_TOPIC, segm)  # 'msg', str(serialized))
+    publish_message(producer, config.NEW_SEGMENTATION_IS_READY_TOPIC, segm)  # 'msg', str(serialized))
     get_message(consumer)
 
 
