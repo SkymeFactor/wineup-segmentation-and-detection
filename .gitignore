@@ -1,8 +1,14 @@
-MaskRCNN/__pycache__
-mrcnn_old/__pycache__
-samples/bottle/__pycache__
-.vscode
+# common
+.*
+!.gitignore
+
+# folders
+__pycache__
+venv
+
+# file types
+*.pyc
+
+# project specific
 MaskRCNN/weights
 MaskRCNN/results
-__pycache__
-.old_trash
