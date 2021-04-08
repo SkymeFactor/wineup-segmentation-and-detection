@@ -15,7 +15,7 @@ log = logging.getLogger(__name__)
 
 def connect_kafka_producer() -> KafkaProducer:
     try:
-        producer = KafkaProducer(bootstrap_servers=['localhost:9092'])
+        producer = KafkaProducer(bootstrap_servers=config.KAFKA_BOOTSTRAP_SERVERS)
     except Exception as error:
         log.error("Producer connection failed", exc_info=error)
         raise
