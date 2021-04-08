@@ -113,25 +113,15 @@ def process_messages(consumer: KafkaConsumer, producer: KafkaProducer) -> None:
 
 
 def kafka_try_send() -> None:
-    producer = connect_kafka_producer()
-    consumer = KafkaConsumer(
-        config.NEW_WINE_MESSAGE_SENT_TOPIC,
-        bootstrap_servers=['localhost:9092'],
-        auto_offset_reset='earliest',
-    )
+    catalog_producer = connect_kafka_producer()
 
-    segm = NewSegmentationIsReadyEvent()
+    event = NewWineSavedMessageSentEvent()
 
-    segm.segmLink = "http://nowhere"
-    segm.maskLink = "http://non-existent"
-    segm.wineId = "1"
+    event.wineId = "1"
+    event.SerializeToString()
+    publish_message(catalog_producer, config.NEW_WINE_MESSAGE_SENT_TOPIC, event)
 
-    # serialized = segm.SerializeToString()
-
-    log.info("Sent event: %s", segm)
-
-    publish_message(producer, config.NEW_SEGMENTATION_IS_READY_TOPIC, segm)  # 'msg', str(serialized))
-    get_message(consumer)
+    log.info("Sent event: %s", event)
 
 
 def serve() -> None:
