@@ -3,6 +3,7 @@ import json
 import random
 import string
 import time
+import typing
 from io import BytesIO
 from threading import Thread
 
@@ -28,35 +29,35 @@ with open("./host", 'r') as file:
 
 
 @app.errorhandler(400)
-def bad_request(error):
+def bad_request(error) -> flask.Response:
     return flask.make_response(
         flask.jsonify({'status': 400, 'error': 'Bad request'}), 400
     )
 
 
 @app.errorhandler(404)
-def not_found(error):
+def not_found(error: typing.Any) -> flask.Response:
     return flask.make_response(
         flask.jsonify({'status': 404, 'error': 'Not found'}), 404
     )
 
 
 @app.errorhandler(405)
-def not_allowed(error):
+def not_allowed(error: typing.Any) -> flask.Response:
     return flask.make_response(
         flask.jsonify({'status': 405, 'error': 'Not allowed'}), 405
     )
 
 
 @app.errorhandler(422)
-def unprocessable_entity(error):
+def unprocessable_entity(error: typing.Any) -> flask.Response:
     return flask.make_response(
         flask.jsonify({'status': 422, 'error': 'Unprocessable Entity'}), 422
     )
 
 
 @app.errorhandler(500)
-def internal_error(error):
+def internal_error(error: typing.Any) -> flask.Response:
     return flask.make_response(
         flask.jsonify({'status': 500, 'error': 'Internal server error'}), 500
     )
@@ -78,13 +79,12 @@ def image_autoremove(mask_name, segm_name):
 
 
 @app.route("/api/v1.0/segmentation", methods=['POST'])
-def segmentation():
+def segmentation() -> flask.Response:
     # Inherit the global backend
     global backend
     # Check if we have a valid request structure
     if not flask.request.json or 'image' not in flask.request.json:
-        flask.abort(400)
-        return
+        return flask.abort(400)
     # Create response's basic structure
     response = {
         'status': 200
@@ -96,8 +96,7 @@ def segmentation():
     if file_request.status_code == 200:
         image = Image.open(BytesIO(file_request.content))
     else:
-        flask.abort(422)
-        return
+        return flask.abort(422)
     # Get image size
     width, height = image.size
     # Run the segmentation
@@ -134,14 +133,14 @@ def segmentation():
     return flask.jsonify(response)
 
 
-@app.route("/api/v1.0/get_image=<img>", methods=['GET'])
-def get_image_from_temp(img):
-    path = os.path.join('./.temp/', img + '.jpg')
+@app.route("/api/v1.0/get_image=<img_name>", methods=['GET'])
+def get_image_from_temp(img_name: str) -> flask.Response:
+    path = os.path.join('./.temp/', img_name + '.jpg')
     # In case if image exists return it
     if os.path.isfile(path):
         return flask.send_file(path, mimetype='image/jpg', cache_timeout=-1)
     else:
-        flask.abort(404)
+        return flask.abort(404)
 
 
 @app.route("/api/v1.0/swagger.json", methods=['GET'])
@@ -153,7 +152,7 @@ def get_swagger_json():
 
 
 @app.route('/api/v1.0/swagger_ui', methods=['GET'])
-def get_swagger():
+def get_swagger() -> flask.Response:
     # Render swagger-ui page
     return flask.render_template(
         template_name_or_list='swaggerui.html',
@@ -167,9 +166,9 @@ def get_swagger():
 
 
 @app.route('/api/v1.0/test_kafka', methods=['GET'])
-def test_kafka():
+def test_kafka() -> str:
     kafka_controller.kafka_try_send()
-    return flask.jsonify("Sent kafka message")
+    return "Sent kafka message"
 
 
 if __name__ == "__main__":
